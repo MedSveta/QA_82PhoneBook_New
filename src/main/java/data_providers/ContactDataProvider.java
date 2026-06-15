@@ -1,7 +1,6 @@
 package data_providers;
 
 import dto.Contact;
-import dto.User;
 import org.testng.annotations.DataProvider;
 
 import java.io.BufferedReader;

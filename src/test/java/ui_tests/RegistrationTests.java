@@ -14,7 +14,7 @@ import utils.TestNGListener;
 
 import java.util.Random;
 
-import static utils.UserFactory.*;
+import static utils.UserFactory.positiveUser;
 @Listeners(TestNGListener.class)
 
 public class RegistrationTests extends AppManager {

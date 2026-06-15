@@ -15,8 +15,8 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.TestNGListener;
 
-import static utils.PropertiesReader.*;
-import static utils.ContactFactory.*;
+import static utils.ContactFactory.positiveContact;
+import static utils.PropertiesReader.getProperty;
 
 @Listeners(TestNGListener.class)
 

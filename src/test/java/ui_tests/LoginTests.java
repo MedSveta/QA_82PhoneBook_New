@@ -11,7 +11,7 @@ import pages.HomePage;
 import pages.LoginPage;
 import utils.TestNGListener;
 
-import static utils.PropertiesReader.*;
+import static utils.PropertiesReader.getProperty;
 @Listeners(TestNGListener.class)
 
 public class LoginTests extends AppManager {
