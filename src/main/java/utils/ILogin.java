@@ -17,7 +17,8 @@ public interface ILogin extends BaseApi{
                 .password(PropertiesReader.getProperty
                         ("base.properties", "password"))
                 .build();
-        RequestBody requestBody = RequestBody.create(GSON.toJson(user), JSON);
+        RequestBody requestBody = RequestBody.create
+                (GSON.toJson(user), JSON);
         Request request = new Request.Builder()
                 .url(BASE_URL + LOGIN_URL)
                 .post(requestBody)
