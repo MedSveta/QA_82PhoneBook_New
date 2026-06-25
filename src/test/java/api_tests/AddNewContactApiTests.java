@@ -101,6 +101,9 @@ public class AddNewContactApiTests
             softAssert.assertTrue(errorMessageDto.getError()
                             .contains("Bad Request"),
                     "validate errorName");
+            softAssert.assertEquals(errorMessageDto.getMessage().toString()
+                            ,"{phone=Phone number must contain only digits! And length min 10, max 15!}",
+                    "validate errorMessage");
             softAssert.assertAll();
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,6 +134,7 @@ public class AddNewContactApiTests
             Assert.fail("created exception");
         }
     }
+
     @Test
     public void addNewContactApiNegativeWrongTokenTest() {
         Contact contact = positiveContact();
@@ -143,11 +147,11 @@ public class AddNewContactApiTests
                 .build();
         try {Response response = OK_HTTP_CLIENT
                 .newCall(request).execute();
-            softAssert.assertEquals(response.code(), 403,
+            softAssert.assertEquals(response.code(), 401,
                     "validate status code");
             System.out.println(response.message());
             softAssert.assertTrue(response.message()
-                            .contains("Forbidden"),
+                            .contains("Unauthorized"),
                     "validate message");
             softAssert.assertAll();
         } catch (IOException e) {
