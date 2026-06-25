@@ -41,6 +41,7 @@ public class AddNewContactApiTests
         Response response;
         try {
             response = OK_HTTP_CLIENT.newCall(request).execute();
+            System.out.println(response.message());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

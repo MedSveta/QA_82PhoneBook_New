@@ -50,8 +50,10 @@ public class GetAllUserContacts implements
                 .addHeader(AUTH, "tokenDto.getToken()")
                 .get()
                 .build();
-        try (Response response = OK_HTTP_CLIENT
-                .newCall(request).execute()) {
+
+        try  {
+            Response response = OK_HTTP_CLIENT
+                    .newCall(request).execute();
             System.out.println(response);
             ContactsDto contactsDto = GSON.fromJson
                     (response.body().string(), ContactsDto.class);
@@ -60,9 +62,9 @@ public class GetAllUserContacts implements
             softAssert.assertTrue(response.message()
                     .contains("Unauthorized"),
                     "validate message");
-            ErrorMessageDto errorMessageDto = GSON.fromJson
-                    (response.body().string(), ErrorMessageDto.class);
-           // System.out.println(errorMessageDto);
+//            ErrorMessageDto errorMessageDto = GSON.fromJson
+//                    (response.body().toString(), ErrorMessageDto.class);
+//            System.out.println(errorMessageDto);
             softAssert.assertAll();
         } catch (IOException e) {
             e.printStackTrace();
