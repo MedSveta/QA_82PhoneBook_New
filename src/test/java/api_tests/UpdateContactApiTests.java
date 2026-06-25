@@ -9,6 +9,8 @@ import okhttp3.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import utils.BaseApi;
 import utils.ILogin;
 
@@ -19,35 +21,62 @@ import static utils.ContactFactory.positiveContact;
 public class UpdateContactApiTests implements BaseApi, ILogin {
     TokenDto tokenDto;
     String idContact;
+    SoftAssert softAssert = new SoftAssert();
 
     @BeforeClass
-    public void login(){
+    public void login() {
         tokenDto = loginGetToken();
     }
 
     @BeforeMethod
-    public void createContact(){
-            Contact contact = positiveContact();
-            RequestBody requestBody = RequestBody.create
-                    (GSON.toJson(contact), JSON);
-            Request request = new Request.Builder()
-                    .url(BASE_URL + ADD_NEW_CONTACT_URL)
-                    .addHeader(AUTH, tokenDto.getToken())
-                    .post(requestBody)
-                    .build();
-            try {
-                Response response = OK_HTTP_CLIENT
-                        .newCall(request).execute();
-                if(response.code() == 200){
-                ResponseMessageDto responseMessageDto = GSON.fromJson
-                        (response.body().string(),
-                                ResponseMessageDto.class);
-                System.out.println(responseMessageDto);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Assert.fail("created exception");
+    public void createContact() {
+        Contact contact = positiveContact();
+        RequestBody requestBody = RequestBody.create
+                (GSON.toJson(contact), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + ADD_NEW_CONTACT_URL)
+                .addHeader(AUTH, tokenDto.getToken())
+                .post(requestBody)
+                .build();
+        try {
+            Response response = OK_HTTP_CLIENT
+                    .newCall(request).execute();
+            if (response.code() == 200) {
+                ResponseMessageDto responseMessageDto =
+                        GSON.fromJson
+                                (response.body().string(),
+                                        ResponseMessageDto.class);
+                //System.out.println(responseMessageDto);
+                idContact = responseMessageDto.getMessage()
+                        .split("ID: ")[1];
+                //System.out.println(idContact);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail("created exception");
         }
     }
+
+    @Test
+    public void updateContactApiPositiveTest() {
+        Contact contact = positiveContact();
+        contact.setId(idContact);
+        RequestBody requestBody = RequestBody
+                .create(GSON.toJson(contact), JSON);
+        Request request = new Request.Builder()
+                .url(BASE_URL + UPDATE_CONTACT_URL)
+                .addHeader(AUTH, tokenDto.getToken())
+                .put(requestBody)
+                .build();
+        try (Response response = OK_HTTP_CLIENT
+                .newCall(request).execute()) {
+            softAssert.assertEquals(response.code(),
+                    200, "validate status code");
+            softAssert.assertAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail("created exception");
+        }
+    }
+}
 
